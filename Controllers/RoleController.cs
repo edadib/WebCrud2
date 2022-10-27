@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
 using WebCrud2.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace WebCrud2.Controllers
 {
@@ -81,6 +82,14 @@ namespace WebCrud2.Controllers
 
         public IActionResult log_in()
         {
+            List<RoleModel> result = new List<RoleModel>();
+            result.Clear();
+            ViewData["user"] = result;
+            ViewData["false"] = "display:none;";
+            string user_email = "";
+            string user_password = "";
+            ViewData["email"] = user_email;
+            ViewData["password"] = user_password;
             return View();
         }
 
@@ -92,9 +101,11 @@ namespace WebCrud2.Controllers
 
             bool status_wujud = false;
 
+            List<RoleModel> result = new List<RoleModel>();
+
             using (SqlConnection con = new SqlConnection(config.GetConnectionString("UserDB")))
             {
-                string sql = "SELECT * FROM RoleUser";
+                string sql = "SELECT * FROM RoleUser where email='"+user_email+"' and password='"+user_password+"'";
                 SqlCommand cmd = new SqlCommand(sql, con);
                 con.Open();
 
@@ -109,28 +120,41 @@ namespace WebCrud2.Controllers
                         user.email = dr.GetString(1);
                         user.password = dr.GetString(2);
 
-                        if(user_email == user.email && user_password == user.password)
+                        result.Add(user);
+                        if (user_email == user.email && user_password == user.password)
                         {
                             status_wujud = true;
                             break;
                         }
                     }
                 }
-
-                if(status_wujud)
-                {
-                    return RedirectToAction(nameof(list_user));
-                }
                 else
                 {
-                    String false_user = "display:block;";
-                    return RedirectToAction(nameof(log_in));
+                    result.Clear();
                 }
 
             }
 
+            if(status_wujud == true)
+            {
+                //ViewData["false"] = "display:none;";
+                //ViewData["user"] = result;
+                //return View("list_user");
+                HttpContext.Session.SetString("email", user_email);
+                return RedirectToAction(nameof(list_user));
+            }
+            else
+            {
+                ViewData["false"] = "display:block;";
+                ViewData["user"] = result;
+                ViewData["email"] = user_email;
+                ViewData["password"] = user_password;
+                return View("log_in");
+            }
 
             
+
+
         }
     }
 }

@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebCrud2.styles.css" asp-append-version="true" />
 </head>
+@*@model RoleModel*@
+@using Microsoft.AspNetCore.Http
+
+    //if(HttpContext.Session.GetString("email") != null)
+    //{
+    //    var logged_user = HttpContext.Session.GetString("email");
+    //}
+}
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -27,6 +35,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Role" asp-action="Index">User</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Role" asp-action="Profile"></a>
                         </li>
                     </ul>
                 </div>

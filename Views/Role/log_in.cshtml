@@ -2,22 +2,29 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    var false_user = ViewData["false"];
+    var email = ViewData["email"];
+    var password = ViewData["password"];
 }
-
+@model IEnumerable<WebCrud2.Models.RoleModel>
+<p>
+    @email
+    @password
+</p>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="login_user">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label">Email</label>
-                <input class="form-control" />
+                <input class="form-control" name="email" id="email"/>
             </div>
             <div class="form-group">
                 <label class="control-label">Password</label>
-                <input class="form-control" type="password" />
+                <input class="form-control" type="password" name="password" id="password"/>
             </div>
             <div>
-                <span class="text-danger" style="@false_user ?? false">Inccorect Credential</span>
+                <span class="text-danger" style="@false_user">Nub!</span>
             </div>
             <div class="form-group">
                 <br />
@@ -26,3 +33,50 @@
         </form>
     </div>
 </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.create_date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.update_date)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in ViewData["user"] as List<RoleModel>) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.create_date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.update_date)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
